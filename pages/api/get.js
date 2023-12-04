@@ -10,9 +10,11 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        if (!url.includes("https://") || !url.includes("http://")) {
+        if (!url.includes("http://") && !url.includes("https://")) {
           url = "https://" + url;
         }
+
+        console.log(`encodeURI(url)`, encodeURI(url));
 
         const response = await fetch(encodeURI(url));
         const html = await response.text();
