@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const placeholder = "Enter website URL";
 const defaultUrl = "google.nl";
+const baseUrl = "everyorigin.jwvbremen.nl";
 
 export default function Home() {
   const [url, setUrl] = useState(defaultUrl);
@@ -53,7 +54,7 @@ export default function Home() {
       <div className="font-sans">
         <h2 className="mb-2 text-4xl font-bold">Usage</h2>
         <div className="flex rounded p-2 text-neutral-900 dark:bg-neutral-100">
-          {"https://everyorigin.netlify.app/get?url="}
+          {`http://${baseUrl}/get?url=`}
           <div
             contentEditable
             className="flex-grow outline-none"
