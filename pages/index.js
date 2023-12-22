@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/common";
 import "highlight.js/styles/github.css";
 import Loader from "@/components/loader";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +50,17 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between gap-8 p-24 text-neutral-900 dark:text-neutral-100 ${inter.className}`}
     >
+      <Head>
+        <title>EveryOrigin</title>
+        <meta
+          name="description"
+          content="
+        EveryOrigin is a free CORS proxy that allows you to access the HTML content of any website from any origin.
+        Free and open source. No Api keyrequired. No rate limit. No annoying ads. No tracking. No bullshit. Just a simple CORS proxy. Enjoy!
+        "
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <header className="absolute top-0 flex w-full justify-end p-2 ">
         <p>
           Authored by:&nbsp;
