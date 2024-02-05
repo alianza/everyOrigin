@@ -120,7 +120,7 @@ export default function Home() {
           </span>
 
           <button
-            className="xs:ml-2 xs:rounded-r xs:-mt-2 -m-2 mt-0 rounded-b bg-blue-600 px-4 font-bold text-neutral-50 transition-colors hover:bg-blue-800 active:bg-blue-500"
+            className="xs:ml-2 xs:rounded-r xs:rounded-bl-none xs:-mt-2 -m-2 mt-0 rounded-b bg-blue-600 px-4 font-bold text-neutral-50 transition-colors hover:bg-blue-800 active:bg-blue-500"
             onClick={fetchHtml}
           >
             Fetch
