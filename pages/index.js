@@ -86,7 +86,7 @@ export default function Home() {
 
       <div className="font-sans">
         <h2 className="text-4xl font-bold">Usage</h2>
-        <h4 className="text-lg font-bold">Fill in the URL you want to fetch</h4>
+        <h3 className="text-lg font-bold">Fill in the URL you want to fetch</h3>
         <div className="flex rounded bg-neutral-300 p-2 text-neutral-900 dark:bg-neutral-100">
           {`https://${baseUrl}/get?url=`}
           <span
