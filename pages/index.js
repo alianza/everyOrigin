@@ -5,6 +5,7 @@ import "highlight.js/styles/github.css";
 import Loader from "@/components/loader";
 import Head from "next/head";
 import TransitionScroll from "react-transition-scroll";
+import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,12 +15,15 @@ const baseUrl = "everyorigin.jwvbremen.nl";
 export const baseStyle = { transitionDuration: "650ms", transitionTimingFunction: "ease-out" };
 export const hiddenStyle = { opacity: 0, transform: "translateY(3em)", filter: "blur(4px)" };
 
+const triggerLoader = (router) => router.push({ pathname: router.asPath }, undefined, { shallow: true });
+
 export default function Home() {
   const [url, setUrl] = useState(defaultUrl);
   const [htmlContent, setHtmlContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [key, setKey] = useState(Date.now());
+  const router = useRouter();
 
   useEffect(() => {
     if (!htmlContent) return;
@@ -31,6 +35,7 @@ export default function Home() {
     const start = Date.now();
     try {
       if (!url) throw new Error("URL is required");
+      triggerLoader(router);
       const validUrl = new URL(!url.includes("http://") && !url.includes("https://") ? `https://${url}` : url);
       setLoading(true);
       const response = await fetch(`/api/get?url=${encodeURIComponent(validUrl.toString())}`);
@@ -42,6 +47,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching HTML:", error);
       setError(error);
+      setHtmlContent("");
     } finally {
       const end = Date.now();
       const duration = end - start;
@@ -151,7 +157,7 @@ export default function Home() {
           </pre>
 
           <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
-          <pre key={key} className="relative shadow-lg">
+          <pre className="relative shadow-lg">
             <code className="language-javascript overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
               {`const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(url)}"); \n`}
               {`const result = await response.text();`}
