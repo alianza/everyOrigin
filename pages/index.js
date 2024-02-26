@@ -4,11 +4,15 @@ import hljs from "highlight.js/lib/common";
 import "highlight.js/styles/github.css";
 import Loader from "@/components/loader";
 import Head from "next/head";
+import TransitionScroll from "react-transition-scroll";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const defaultUrl = "google.nl";
 const baseUrl = "everyorigin.jwvbremen.nl";
+
+export const baseStyle = { transitionDuration: "650ms", transitionTimingFunction: "ease-out" };
+export const hiddenStyle = { opacity: 0, transform: "translateY(3em)", filter: "blur(4px)" };
 
 export default function Home() {
   const [url, setUrl] = useState(defaultUrl);
@@ -101,7 +105,7 @@ export default function Home() {
       <div className="font-sans">
         <h2 className="text-4xl font-bold">Usage</h2>
         <h3 className="text-lg font-bold">Fill in the URL you want to fetch</h3>
-        <div className="xs:flex-row flex flex-col rounded bg-neutral-200 p-2 text-neutral-900 shadow-md dark:bg-neutral-100">
+        <div className="flex flex-col rounded bg-neutral-100 p-2 text-neutral-900 shadow-md xs:flex-row">
           <span style={{ overflowWrap: "anywhere" }}>{`https://${baseUrl}/get?url=`}</span>
           <span
             className={`flex-grow ${
@@ -120,7 +124,7 @@ export default function Home() {
           </span>
 
           <button
-            className="xs:ml-2 xs:rounded-r xs:rounded-bl-none xs:-mt-2 -m-2 mt-0 rounded-b bg-blue-600 px-4 font-bold text-neutral-50 transition-colors hover:bg-blue-800 active:bg-blue-500"
+            className="-m-2 mt-0 rounded-b bg-blue-600 px-4 font-bold text-neutral-50 transition-colors hover:bg-blue-800 active:bg-blue-500 xs:-mt-2 xs:ml-2 xs:rounded-r xs:rounded-bl-none"
             onClick={fetchHtml}
           >
             Fetch
@@ -128,35 +132,33 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center">
-        {loading && <Loader className="m-4" />}
+      {loading && <Loader className="m-4" />}
 
-        {error && !loading && <p className="p-4">Error fetching HTML content: {error.message}</p>}
-        {htmlContent && !loading && (
-          <>
-            <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
-            <pre key={key} className="relative shadow-lg">
-              <button
-                className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
-                onClick={() => setHtmlContent("")}
-              >
-                ✖️
-              </button>
-              <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-200 p-2 text-neutral-800">
-                {htmlContent}
-              </code>
-            </pre>
+      {error && !loading && <p className="p-4">Error fetching HTML content: {error.message}</p>}
+      {htmlContent && !loading && (
+        <TransitionScroll baseStyle={baseStyle} hiddenStyle={hiddenStyle} className="flex flex-col items-center">
+          <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
+          <pre key={key} className="relative shadow-lg">
+            <button
+              className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
+              onClick={() => setHtmlContent("")}
+            >
+              ✖️
+            </button>
+            <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
+              {htmlContent}
+            </code>
+          </pre>
 
-            <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
-            <pre key={12341234123} className="relative shadow-lg">
-              <code className="language-javascript max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-200 p-2 text-neutral-800">
-                {`const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(url)}"); \n`}
-                {`const result = await response.text();`}
-              </code>
-            </pre>
-          </>
-        )}
-      </div>
+          <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
+          <pre key={12341234123} className="relative shadow-lg">
+            <code className="language-javascript overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
+              {`const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(url)}"); \n`}
+              {`const result = await response.text();`}
+            </code>
+          </pre>
+        </TransitionScroll>
+      )}
     </main>
   );
 }
