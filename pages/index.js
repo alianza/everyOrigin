@@ -151,7 +151,7 @@ export default function Home() {
           </pre>
 
           <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
-          <pre key={12341234123} className="relative shadow-lg">
+          <pre key={key} className="relative shadow-lg">
             <code className="language-javascript overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
               {`const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(url)}"); \n`}
               {`const result = await response.text();`}
