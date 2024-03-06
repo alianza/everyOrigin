@@ -6,6 +6,7 @@ import Loader from "@/components/loader";
 import Head from "next/head";
 import TransitionScroll from "react-transition-scroll";
 import { useRouter } from "next/router";
+import { triggerLoader } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,8 +15,6 @@ const baseUrl = "everyorigin.jwvbremen.nl";
 
 export const baseStyle = { transitionDuration: "650ms", transitionTimingFunction: "ease-out" };
 export const hiddenStyle = { opacity: 0, transform: "translateY(3em)", filter: "blur(4px)" };
-
-const triggerLoader = (router) => router.push({ pathname: router.asPath }, undefined, { shallow: true });
 
 export default function Home() {
   const [url, setUrl] = useState(defaultUrl);
@@ -35,13 +34,13 @@ export default function Home() {
     const start = Date.now();
     try {
       if (!url) throw new Error("URL is required");
-      triggerLoader(router);
       const validUrl = new URL(!url.includes("http://") && !url.includes("https://") ? `https://${url}` : url);
       setLoading(true);
       const response = await fetch(`/api/get?url=${encodeURIComponent(validUrl.toString())}`);
       const { html } = await response.json();
       if (!html) throw new Error("No HTML content found");
       if (html === htmlContent) return;
+      triggerLoader(router);
       setKey(Date.now());
       setHtmlContent(html);
     } catch (error) {
@@ -80,7 +79,7 @@ export default function Home() {
         </p>
       </header>
 
-      <div className="relative m-auto place-items-center after:absolute after:top-0 after:-z-20 after:h-[180px] after:w-[180px] after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] after:sm:w-[360px] before:lg:h-[360px] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40">
+      <div className="relative m-auto place-items-center after:absolute after:top-0 after:-z-20 after:h-[180px] after:w-[180px] after:animate-[pulse_10s_ease-in-out_infinite] after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] after:sm:w-[360px] before:lg:h-[360px] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40">
         <h1 className="inline-block text-4xl font-bold sm:text-6xl" style={{ overflowWrap: "anywhere" }}>
           EveryOrigin
         </h1>
