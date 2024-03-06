@@ -7,6 +7,8 @@ import Head from "next/head";
 import TransitionScroll from "react-transition-scroll";
 import { useRouter } from "next/router";
 import { triggerLoader } from "@/lib/utils";
+import { toast } from "react-toastify";
+import { ClipboardDocumentListIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,11 +25,18 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [key, setKey] = useState(Date.now());
   const router = useRouter();
+  const sampleCode = `const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(
+    url,
+  )}");\nconst result = await response.text();`;
 
   useEffect(() => {
     if (!htmlContent) return;
     hljs.highlightAll();
   }, [htmlContent, loading]);
+
+  useEffect(() => {
+    hljs.highlightAll();
+  }, []);
 
   const fetchHtml = async () => {
     setError(null);
@@ -53,6 +62,16 @@ export default function Home() {
       if (duration < 1000) await new Promise((resolve) => setTimeout(resolve, 1000 - duration));
       setLoading(false);
     }
+  };
+
+  const copySampleCode = async () => {
+    toast.success("Code copied to clipboard");
+    await navigator.clipboard.writeText(sampleCode);
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById("sampleCode"));
+    selection.removeAllRanges();
+    selection.addRange(range);
   };
 
   return (
@@ -140,30 +159,41 @@ export default function Home() {
       {loading && <Loader className="m-4" />}
 
       {error && !loading && <p className="p-4">Error fetching HTML content: {error.message}</p>}
-      {htmlContent && !loading && (
-        <TransitionScroll baseStyle={baseStyle} hiddenStyle={hiddenStyle} className="flex flex-col items-center">
-          <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
-          <pre key={key} className="relative shadow-lg">
-            <button
-              className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
-              onClick={() => setHtmlContent("")}
-            >
-              ✖️
-            </button>
-            <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
-              {htmlContent}
-            </code>
-          </pre>
+      {/*{htmlContent && !loading && (*/}
+      <TransitionScroll baseStyle={baseStyle} hiddenStyle={hiddenStyle} className="flex flex-col items-center">
+        <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
+        <pre key={key} className="relative shadow-lg">
+          <button
+            className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
+            onClick={() => setHtmlContent("")}
+          >
+            <XMarkIcon className="h-8 w-8 stroke-2 text-neutral-900" />
+          </button>
+          <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
+            {htmlContent}
+          </code>
+        </pre>
 
-          <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
-          <pre className="relative shadow-lg">
-            <code className="language-javascript overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
-              {`const response = await fetch("https://${baseUrl}/get?url=${encodeURIComponent(url)}"); \n`}
-              {`const result = await response.text();`}
-            </code>
-          </pre>
-        </TransitionScroll>
-      )}
+        <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
+        <pre className="relative shadow-lg">
+          <div className="flex justify-between rounded-t bg-slate-700 px-2 py-1">
+            <span>Language: JavaScript</span>
+            <ClipboardDocumentListIcon
+              title="Copy code to clipboard"
+              className="h-6 w-6 cursor-pointer text-neutral-100 transition-transform hover:scale-110 active:scale-95"
+              onClick={copySampleCode}
+            />
+          </div>
+          <code
+            id="sampleCode"
+            className="language-javascript overflow-hidden rounded-b bg-neutral-100 p-2 text-neutral-800"
+            onDoubleClick={copySampleCode}
+          >
+            {sampleCode}
+          </code>
+        </pre>
+      </TransitionScroll>
+      {/*)}*/}
     </main>
   );
 }
