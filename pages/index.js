@@ -34,10 +34,6 @@ export default function Home() {
     hljs.highlightAll();
   }, [htmlContent, loading]);
 
-  useEffect(() => {
-    hljs.highlightAll();
-  }, []);
-
   const fetchHtml = async () => {
     setError(null);
     const start = Date.now();
@@ -159,41 +155,41 @@ export default function Home() {
       {loading && <Loader className="m-4" />}
 
       {error && !loading && <p className="p-4">Error fetching HTML content: {error.message}</p>}
-      {/*{htmlContent && !loading && (*/}
-      <TransitionScroll baseStyle={baseStyle} hiddenStyle={hiddenStyle} className="flex flex-col items-center">
-        <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
-        <pre key={key} className="relative shadow-lg">
-          <button
-            className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
-            onClick={() => setHtmlContent("")}
-          >
-            <XMarkIcon className="h-8 w-8 stroke-2 text-neutral-900" />
-          </button>
-          <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
-            {htmlContent}
-          </code>
-        </pre>
+      {htmlContent && !loading && (
+        <TransitionScroll baseStyle={baseStyle} hiddenStyle={hiddenStyle} className="flex flex-col items-center">
+          <h2 className="my-2 text-lg font-bold">HTML Content:</h2>
+          <pre key={key} className="relative shadow-lg">
+            <button
+              className="absolute right-2 top-2 origin-center transition-transform hover:scale-110 active:scale-95"
+              onClick={() => setHtmlContent("")}
+            >
+              <XMarkIcon className="h-8 w-8 stroke-2 text-neutral-900" />
+            </button>
+            <code className="language-html max-w-[calc(100vw-4em)] overflow-hidden rounded bg-neutral-100 p-2 text-neutral-800">
+              {htmlContent}
+            </code>
+          </pre>
 
-        <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
-        <pre className="relative shadow-lg">
-          <div className="flex justify-between rounded-t bg-slate-700 px-2 py-1">
-            <span>Language: JavaScript</span>
-            <ClipboardDocumentListIcon
-              title="Copy code to clipboard"
-              className="h-6 w-6 cursor-pointer text-neutral-100 transition-transform hover:scale-110 active:scale-95"
-              onClick={copySampleCode}
-            />
-          </div>
-          <code
-            id="sampleCode"
-            className="language-javascript overflow-hidden rounded-b bg-neutral-100 p-2 text-neutral-800"
-            onDoubleClick={copySampleCode}
-          >
-            {sampleCode}
-          </code>
-        </pre>
-      </TransitionScroll>
-      {/*)}*/}
+          <h2 className="mb-2 mt-6 text-lg font-bold">Node Fetch Example Code:</h2>
+          <pre className="relative shadow-lg">
+            <div className="flex justify-between rounded-t bg-slate-700 px-2 py-1">
+              <span>Language: JavaScript</span>
+              <ClipboardDocumentListIcon
+                title="Copy code to clipboard"
+                className="h-6 w-6 cursor-pointer text-neutral-100 transition-transform hover:scale-110 active:scale-95"
+                onClick={copySampleCode}
+              />
+            </div>
+            <code
+              id="sampleCode"
+              className="language-javascript overflow-hidden rounded-b bg-neutral-100 p-2 text-neutral-800"
+              onDoubleClick={copySampleCode}
+            >
+              {sampleCode}
+            </code>
+          </pre>
+        </TransitionScroll>
+      )}
     </main>
   );
 }
